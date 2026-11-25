@@ -423,6 +423,37 @@ function quotePrice(amount, el){
   var vi = "Tổng của bạn hôm nay là $" + amount + ". Bạn thanh toán tiền mặt hay thẻ?";
   say(en, vi, el);
 }
+// Tìm kiếm bản dịch có sẵn trong data và convData trước (0 giây, không tốn API)
+function findLocalTranslation(text, srcLang){
+  var clean=function(s){
+    return (s||'').toLowerCase().replace(/[^\w\sàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/g,'').replace(/\s+/g,' ').trim();
+  };
+  var q=clean(text);
+  if(!q || q.length<2) return null;
+
+  var pool=[];
+  if(typeof data!=='undefined' && Array.isArray(data)){
+    data.forEach(function(g){ if(Array.isArray(g)) pool=pool.concat(g); });
+  }
+  if(typeof convData!=='undefined'){
+    Object.keys(convData).forEach(function(k){ if(Array.isArray(convData[k])) pool=pool.concat(convData[k]); });
+  }
+
+  var bestMatch=null, bestScore=0;
+  for(var i=0;i<pool.length;i++){
+    var item=pool[i];
+    var src=clean(srcLang==='en-US'?item.en:item.vi);
+    var dst=(srcLang==='en-US'?item.vi:item.en);
+    if(!src || !dst) continue;
+    if(src===q) return dst;
+
+    var qWords=q.split(' '), sWords=src.split(' '), hits=0;
+    qWords.forEach(function(w){ if(w.length>1 && sWords.indexOf(w)!==-1) hits++; });
+    var score=hits/Math.max(qWords.length, sWords.length);
+    if(score>bestScore){ bestScore=score; bestMatch=dst; }
+  }
+  return bestScore>=0.7 ? bestMatch : null;
+}
 // Dịch trực tiếp: giữ micro mở, hiện chữ đang nhận diện và chỉ dịch khi có khoảng nghỉ.
 var liveRecognition=null, liveLang='', liveActive=false, liveFinalText='', livePauseTimer=null, liveRestartTimer=null, liveRequestId=0, liveAbort=null;
 function setMicButtons(activeLang){
@@ -447,14 +478,30 @@ function stopLiveMic(message){
   if(message) document.getElementById('o').innerText=message;
 }
 function translateLiveText(textToTranslate, lang){
+  if(!textToTranslate.trim()) return;
+
+  // BƯỚC 1: Ưu tiên dò tìm trong kho dữ liệu có sẵn trước (0 giây)
+  var localAns = findLocalTranslation(textToTranslate, lang);
+  if(localAns){
+    document.getElementById('t').innerText = localAns;
+    lt = localAns;
+    ll = lang==='en-US'?'vi-VN':'en-US';
+    if(lang==='vi-VN') spk(localAns,'en-US');
+    return;
+  }
+
+  // BƯỚC 2: Câu lạ ngoài kho mới gọi Google AI dịch online
   var k=(localStorage.getItem('gk')||'').replace(/\s+/g,'');
-  if(!textToTranslate.trim() || !k) return;
+  if(!k){
+    document.getElementById('t').innerText='Câu mới ngoài kho mẫu. Hãy bấm ⚙️ API Key để dịch tự do!';
+    return;
+  }
   var requestId=++liveRequestId;
   if(liveAbort){try{liveAbort.abort()}catch(e){}}
   liveAbort=new AbortController();
   var target=lang==='en-US'?'Tiếng Việt':'tiếng Anh Mỹ dùng trong tiệm nail';
   var prompt='Bạn là phiên dịch viên hội thoại trong tiệm nail tại Mỹ. Hãy dịch tự nhiên, ngắn gọn và đúng ngữ cảnh. Giữ nguyên ý, giá tiền, tên dịch vụ và thuật ngữ nail cần thiết. Chỉ trả về bản dịch, không giải thích. Dịch sang '+target+': '+textToTranslate;
-  document.getElementById('t').innerText='Đang dịch...';
+  document.getElementById('t').innerText='Đang dịch AI...';
   var domain=['generativelanguage','googleapis','com'].join('.');
   var apiUrl='https://'+domain+'/v1beta/models/gemini-3.5-flash-lite:generateContent?key='+k;
   var timedOut=false;
@@ -471,7 +518,6 @@ function translateLiveText(textToTranslate, lang){
     ans=ans.trim();
     document.getElementById('t').innerText=ans;
     lt=ans;ll=lang==='en-US'?'vi-VN':'en-US';
-    // Chỉ tự đọc bản dịch tiếng Anh khi thợ nói tiếng Việt.
     if(lang==='vi-VN')spk(ans,'en-US');
   }).catch(function(err){
     if(requestId!==liveRequestId)return;
@@ -526,14 +572,12 @@ function startLiveRecognition(lang){
 function mic(lang){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return alert('Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Bạn hãy thử Google Chrome trên máy tính hoặc trình duyệt hỗ trợ micro.');
-  var key=(localStorage.getItem('gk')||'').replace(/\s+/g,'');
-  if(!key)return openM();
   if(liveActive && liveLang===lang){stopLiveMic('Đã dừng nghe.');return;}
   if(liveActive)stopLiveMic();
   window.speechSynthesis.cancel();
   liveLang=lang;liveActive=true;liveFinalText='';
   document.getElementById('o').innerText=lang==='en-US'?'Đang nghe khách nói tiếng Anh...':'Đang nghe bạn nói tiếng Việt...';
-  document.getElementById('t').innerText='Bản dịch sẽ hiện ở đây sau khi bạn ngừng nói.';
+  document.getElementById('t').innerText='Bản dịch sẽ hiện ở đây khi bạn nói...';
   setMicButtons(lang);
   startLiveRecognition(lang);
 }
