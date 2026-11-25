@@ -424,6 +424,122 @@ function quotePrice(amount, el){
   say(en, vi, el);
 }
 // Tìm kiếm bản dịch có sẵn trong data và convData trước (0 giây, không tốn API)
+// Kho từ điển dịch ngầm chuyên ngành Nail (chạy hậu trường cho phần Dịch 0 giây)
+// Kho từ điển dịch ngầm chuyên ngành Nail & Xã giao (chạy hậu trường cho phần Dịch 0 giây)
+var extraDict = [
+  // 1. Chào hỏi & Đón tiếp
+  {vi:"Chào buổi sáng",en:"Good morning"},
+  {vi:"Chào buổi chiều",en:"Good afternoon"},
+  {vi:"Bạn đi mấy người",en:"How many people are in your party"},
+  {vi:"Bạn muốn làm với thợ nào",en:"Do you have a preferred technician"},
+  {vi:"Mời bạn ra ghế số một",en:"Please have a seat at chair number one"},
+  {vi:"Bạn chọn màu sơn ở kệ phía trước nhé",en:"Please pick your color from the wall over there"},
+  {vi:"Mời bạn rửa tay sạch với xà phòng trước nhé",en:"Please wash your hands with soap first"},
+
+  // 2. Xã giao: Thợ / Chủ hỏi khách
+  {vi:"Hôm nay ngày của bạn thế nào",en:"How is your day going so far"},
+  {vi:"Bạn làm nghề gì vậy",en:"What do you do for a living"},
+  {vi:"Hôm nay bạn được nghỉ làm à",en:"Are you off work today"},
+  {vi:"Bạn sống ở gần đây không",en:"Do you live around here"},
+  {vi:"Bạn sống ở đây bao lâu rồi",en:"How long have you lived here"},
+  {vi:"Bạn có mấy bé rồi",en:"How many kids do you have"},
+  {vi:"Các bé nhà bạn mấy tuổi rồi",en:"How old are your kids"},
+  {vi:"Sắp tới bạn có đi du lịch đâu không",en:"Do you have any upcoming trips or vacations"},
+  {vi:"Bạn làm móng để chuẩn bị đi tiệc hay đi chơi à",en:"Are you getting your nails done for a special occasion"},
+  {vi:"Tôi rất thích kiểu tóc của bạn",en:"I love your hair"},
+  {vi:"Áo của bạn đẹp quá",en:"Your outfit is so cute"},
+  {vi:"Nhẫn của bạn đẹp thật đấy",en:"Your ring is gorgeous"},
+  {vi:"Hôm nay trời nóng quá nhỉ",en:"It is so hot outside today"},
+  {vi:"Hôm nay trời lạnh quá nhỉ",en:"It is freezing outside today"},
+  {vi:"Ngoài trời đang mưa à",en:"Is it raining outside"},
+  {vi:"Dạo này công việc của bạn thế nào",en:"How has work been lately"},
+
+  // 3. Xã giao: Khách hỏi thợ / chủ
+  {vi:"Bạn tên là gì",en:"What is your name"},
+  {vi:"Bạn làm ở tiệm này bao lâu rồi",en:"How long have you worked here"},
+  {vi:"Bạn làm nghề nail bao lâu rồi",en:"How long have you been doing nails"},
+  {vi:"Bạn đến từ nước nào",en:"Where are you originally from"},
+  {vi:"Bạn sang Mỹ được bao lâu rồi",en:"How long have you been in the US"},
+  {vi:"Bạn có gia đình và con cái chưa",en:"Are you married or do you have kids"},
+  {vi:"Cuối tuần tiệm mình có đông không",en:"Do you guys get busy on the weekends"},
+  {vi:"Mấy giờ tiệm mình đóng cửa",en:"What time do you guys close"},
+  {vi:"Ngày mai bạn có đi làm không",en:"Are you working tomorrow"},
+  {vi:"Ngày nào trong tuần bạn được nghỉ",en:"What is your day off"},
+  {vi:"Bạn có về thăm Việt Nam thường xuyên không",en:"Do you visit Vietnam often"},
+  {vi:"Tên của bạn phát âm thế nào cho đúng",en:"How do you pronounce your name"},
+
+  // 4. Kỹ thuật & Kiểu dáng móng
+  {vi:"Móng thật của bạn hơi yếu",en:"Your natural nails are a bit weak"},
+  {vi:"Bạn có muốn nối dài móng không",en:"Would you like nail extensions"},
+  {vi:"Cắt ngắn bớt bao nhiêu thì vừa",en:"How much would you like me to cut off"},
+  {vi:"Dáng hạnh nhân",en:"Almond shape"},
+  {vi:"Dáng móng thang",en:"Coffin shape"},
+  {vi:"Dáng vuông bo góc",en:"Square with rounded corners"},
+  {vi:"Dáng nhọn",en:"Stiletto shape"},
+  {vi:"Độ dài này đã đều hai bên chưa",en:"Is the length even on both sides"},
+  {vi:"Mình đẩy da chết nhẹ nhàng cho bạn nhé",en:"Let me gently push back your cuticles"},
+  {vi:"Móng này bị nứt rồi, mình đắp lại ngón này nhé",en:"This nail is cracked, let me fix this finger for you"},
+
+  // 5. Sơn, Gel & Vẽ mẫu
+  {vi:"Sơn hai lớp hay ba lớp",en:"Two coats or three coats"},
+  {vi:"Màu này lên tay rất sáng da",en:"This color brightens up your skin tone"},
+  {vi:"Bạn muốn sơn mắt mèo hay tráng gương",en:"Would you like cat eye or chrome powder"},
+  {vi:"Bạn muốn đính đá hay kim tuyến",en:"Would you like rhinestones or glitter"},
+  {vi:"Bạn có ảnh mẫu trên điện thoại không",en:"Do you have a design picture on your phone"},
+  {vi:"Vẽ mẫu này thêm 10 đô nhé",en:"This design will be 10 dollars extra"},
+  {vi:"Tháo bộ cũ thêm 15 đô nhé",en:"Soaking off the old set is 15 dollars extra"},
+  {vi:"Bạn giữ tay yên trong đèn đừng chạm vào thành đèn nhé",en:"Keep your hand still in the lamp and do not touch the sides"},
+
+  // 6. Làm chân (Pedicure) & Spa
+  {vi:"Mời bạn ngâm chân vào nước ấm",en:"Please soak your feet in the warm water"},
+  {vi:"Nước có lạnh quá không",en:"Is the water too cold"},
+  {vi:"Bạn chọn gói làm chân thường hay gói đặc biệt",en:"Would you like a regular pedicure or a deluxe pedicure"},
+  {vi:"Mình tẩy tế bào chết chân cho bạn nhé",en:"Let me apply the sugar scrub on your legs"},
+  {vi:"Mình đắp mặt nạ bùn và ủ khăn nóng nhé",en:"I will put on the mud mask and wrap with hot towels"},
+  {vi:"Mình sơn móng chân trước hay massage trước",en:"Would you like polish first or massage first"},
+  {vi:"Bạn mang dép xốp của tiệm để khỏi lem sơn nhé",en:"Please wear these foam slippers so you do not smudge your polish"},
+
+  // 7. Khách nói & Hỏi thường gặp
+  {vi:"Tôi bị gãy một móng",en:"I broke one of my nails"},
+  {vi:"Làm sao để giữ móng bền hơn",en:"How can I make my nails last longer"},
+  {vi:"Sơn này khô chưa",en:"Are my nails dry yet"},
+  {vi:"Tôi có thể đi vệ sinh một chút không",en:"Can I use the restroom real quick"},
+  {vi:"Ở đây có nhận thẻ tín dụng không",en:"Do you accept credit cards"},
+  {vi:"Tôi muốn đặt lịch hẹn cho tuần sau",en:"I would like to book an appointment for next week"},
+  {vi:"Cảm ơn bạn đã làm rất đẹp",en:"Thank you, you did a great job"},
+  {vi:"Tôi rất thích bộ móng này",en:"I love my nails"},
+
+  // 8. Thanh toán & Tạm biệt
+  {vi:"Bạn thanh toán ở quầy lễ tân giúp mình nhé",en:"Please pay at the front desk"},
+  {vi:"Bạn có cần lấy hóa đơn không",en:"Would you like a receipt"},
+  {vi:"Hẹn gặp lại bạn lần sau nhé",en:"See you next time"},
+  {vi:"Chúc bạn cuối tuần vui vẻ",en:"Have a great weekend"},
+  // 9. Khách phàn nàn & Xử lý tình huống (Bổ sung chuyên sâu)
+  {vi:"Bạn cắt phạm vào da mình bị chảy máu rồi",en:"You cut my cuticle and it is bleeding"},
+  {vi:"Ôi tôi xin lỗi bạn nhiều, để mình sát trùng và cầm máu ngay nhé",en:"Oh I am so sorry, let me put some antiseptic on it right away"},
+  {vi:"Móng đắp hơi dày và nặng tay quá",en:"The nails feel a bit too thick and heavy"},
+  {vi:"Để mình dũa mỏng và tự nhiên hơn cho bạn nhé",en:"Let me file them down thinner and more natural for you"},
+  {vi:"Sơn bị nổi bọt khí và không mịn",en:"The polish has bubbles and looks bumpy"},
+  {vi:"Mình sẽ lau đi và sơn lại ngón này thật mịn cho bạn",en:"I will wipe it off and repaint this nail smoothly for you"},
+  {vi:"Màu sơn bị lem ra ngoài viền da rồi",en:"There is polish on my skin around the nails"},
+  {vi:"Đợi chút mình dùng cọ sạch viền da cho gọn ngay nhé",en:"One second, let me clean up the edges with a brush right away"},
+  {vi:"Sơn gel chưa khô hẳn, vẫn còn hơi dính",en:"The gel polish is not fully dry, it still feels sticky"},
+  {vi:"Bạn cho tay vào hơ thêm 30 giây nữa giúp mình nhé",en:"Please put your hand back in the lamp for 30 more seconds"},
+  {vi:"Nước ngâm chân nguội quá rồi",en:"The pedicure water got too cold"},
+  {vi:"Để mình xả thêm nước ấm ngay cho bạn nhé",en:"Let me add some warm water right away for you"},
+  {vi:"Sao hôm nay tính tiền đắt hơn lần trước vậy",en:"Why is it more expensive than last time"},
+  {vi:"Tại hôm nay có thêm tiền tháo móng cũ và vẽ kiểu nữa ạ",en:"Because today includes the soak-off and nail design extra"},
+  {vi:"Tôi đợi hơn 30 phút rồi mà vẫn chưa tới lượt",en:"I have been waiting for over 30 minutes"},
+  {vi:"Thành thật xin lỗi bạn vì hôm nay quá đông, ghế tiếp theo sẽ là của bạn ngay",en:"I sincerely apologize for the wait, you are next as soon as this chair finishes"},
+  {vi:"Tôi không thích cách làm của người thợ này",en:"I am not happy with this technician"},
+  {vi:"Dạ không sao, để mình đổi thợ khác làm tiếp cho bạn hài lòng nhé",en:"No problem at all, let me have another technician take care of you"},
+  {vi:"Đầu móng dũa hơi sắc quá, dễ bị cào xước",en:"The nail edges feel too sharp"},
+  {vi:"Để mình bo nhẹ đầu móng lại cho êm tay bạn nhé",en:"Let me buff the edges softer for you"},
+  {vi:"Cái đá đính trên móng bị rớt ra rồi",en:"The rhinestone fell off my nail"},
+  {vi:"Bạn ghé tiệm bất cứ lúc nào mình gắn lại miễn phí cho nhé",en:"Stop by anytime and we will put it back on for free"},
+  {vi:"Mình làm xong bạn kiểm tra kỹ nếu chưa ưng chỗ nào cứ nói mình sửa liền nha",en:"Please check everything carefully and let me know if anything needs fixing"}
+];
+
 function findLocalTranslation(text, srcLang){
   var clean=function(s){
     return (s||'').toLowerCase().replace(/[^\w\sàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/g,'').replace(/\s+/g,' ').trim();
@@ -431,7 +547,7 @@ function findLocalTranslation(text, srcLang){
   var q=clean(text);
   if(!q || q.length<2) return null;
 
-  var pool=[];
+  var pool=extraDict.slice();
   if(typeof data!=='undefined' && Array.isArray(data)){
     data.forEach(function(g){ if(Array.isArray(g)) pool=pool.concat(g); });
   }
@@ -452,8 +568,9 @@ function findLocalTranslation(text, srcLang){
     var score=hits/Math.max(qWords.length, sWords.length);
     if(score>bestScore){ bestScore=score; bestMatch=dst; }
   }
-  return bestScore>=0.7 ? bestMatch : null;
+  return bestScore>=0.65 ? bestMatch : null;
 }
+
 // Dịch trực tiếp: giữ micro mở, hiện chữ đang nhận diện và chỉ dịch khi có khoảng nghỉ.
 var liveRecognition=null, liveLang='', liveActive=false, liveFinalText='', livePauseTimer=null, liveRestartTimer=null, liveRequestId=0, liveAbort=null;
 function setMicButtons(activeLang){
