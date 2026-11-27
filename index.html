@@ -876,42 +876,6 @@ function translateLiveText(textToTranslate, lang) {
     }
   });
 }
-
-  // BƯỚC 2: Câu lạ ngoài kho mới gọi Google AI dịch online
-  var k=(localStorage.getItem('gk')||'').replace(/\s+/g,'');
-  if(!k){
-    document.getElementById('t').innerText='Câu mới ngoài kho mẫu. Hãy bấm ⚙️ API Key để dịch tự do!';
-    return;
-  }
-  var requestId=++liveRequestId;
-  if(liveAbort){try{liveAbort.abort()}catch(e){}}
-  liveAbort=new AbortController();
-  var target=lang==='en-US'?'Tiếng Việt':'tiếng Anh Mỹ dùng trong tiệm nail';
-  var prompt='Bạn là phiên dịch viên hội thoại trong tiệm nail tại Mỹ. Hãy dịch tự nhiên, ngắn gọn và đúng ngữ cảnh. Giữ nguyên ý, giá tiền, tên dịch vụ và thuật ngữ nail cần thiết. Chỉ trả về bản dịch, không giải thích. Dịch sang '+target+': '+textToTranslate;
-  document.getElementById('t').innerText='Đang dịch AI...';
-  var domain=['generativelanguage','googleapis','com'].join('.');
-  var apiUrl='https://'+domain+'/v1beta/models/gemini-3.5-flash-lite:generateContent?key='+k;
-  var timedOut=false;
-  var timeout=setTimeout(function(){timedOut=true;if(liveAbort)liveAbort.abort()},18000);
-  fetch(apiUrl,{
-    method:'POST',headers:{'Content-Type':'application/json'},signal:liveAbort.signal,
-    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.2,maxOutputTokens:180}})
-  }).then(async function(r){
-    var d=await r.json();
-    if(!r.ok || d.error){var msg=d.error&&d.error.message?d.error.message:'Mã lỗi '+r.status;throw new Error(msg)}
-    var ans=d&&d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]&&d.candidates[0].content.parts[0].text;
-    if(!ans) throw new Error('Chưa nhận được bản dịch. Bạn thử nói lại nhé.');
-    if(requestId!==liveRequestId)return;
-    ans=ans.trim();
-    document.getElementById('t').innerText=ans;
-    lt=ans;ll=lang==='en-US'?'vi-VN':'en-US';
-    if(lang==='vi-VN')spk(ans,'en-US');
-  }).catch(function(err){
-    if(requestId!==liveRequestId)return;
-    if(err.name==='AbortError'&&!timedOut)return;
-    document.getElementById('t').innerText=timedOut?'Mạng phản hồi quá chậm. Bạn hãy thử lại.':'Chưa dịch được: '+err.message+' Bạn có thể bấm micro và nói lại.';
-  }).finally(function(){clearTimeout(timeout)});
-}
 function scheduleLiveTranslation(lang){
   if(livePauseTimer)clearTimeout(livePauseTimer);
   livePauseTimer=setTimeout(function(){
