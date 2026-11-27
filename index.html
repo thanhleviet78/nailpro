@@ -598,8 +598,16 @@ var extraDict = [
   {vi:"Bạn kiểm tra lại bộ móng nhé",en:"Please check your nails"},
   {vi:"Bạn có hài lòng với bộ móng không",en:"Are you happy with your nails"},
   {vi:"Bạn muốn sửa chỗ nào không",en:"Would you like me to fix anything"},
-  {vi:"Cảm ơn bạn đã chờ",en:"Thank you for waiting"}
+  {vi:"Cảm ơn bạn đã chờ",en:"Thank you for waiting"},
+  {vi:"Chị thích màu nào ạ",en:"Which color do you like"},
+  {vi:"Chị muốn chọn màu sơn nào",en:"Which nail color would you like"},
+  {vi:"Chị muốn màu sáng hay màu tối",en:"Would you like a light or dark color"},
+  {vi:"Chị muốn màu tự nhiên hay nổi bật",en:"Would you like a natural or bold color"},
+  {vi:"Chị có hình màu muốn chọn không",en:"Do you have a color in mind"}
 ];
+
+// Thư viện ghi nhớ những câu AI đã dịch trong phiên hiện tại
+  var sessionDict = [];
 
 function findLocalTranslation(text, srcLang) {
   function clean(s) {
@@ -620,6 +628,11 @@ function findLocalTranslation(text, srcLang) {
 
   // Gom dữ liệu từ thư viện ẩn, bài học và hội thoại
   var pool = Array.isArray(extraDict) ? extraDict.slice() : [];
+
+  // Bổ sung những câu AI đã dịch và ghi nhớ
+if (Array.isArray(sessionDict)) {
+  pool = pool.concat(sessionDict);
+}
 
   if (typeof data !== 'undefined' && Array.isArray(data)) {
     data.forEach(function(g) {
@@ -850,8 +863,34 @@ function translateLiveText(textToTranslate, lang) {
     // Chỉ hiển thị kết quả thuộc yêu cầu mới nhất
     if (requestId !== liveRequestId) return;
 
-    ans = ans.trim();
-    document.getElementById('t').innerText = ans;
+ans = ans.trim();
+
+// GHI NHỚ CÂU AI VỪA DỊCH
+var learnedItem;
+
+if (lang === 'en-US') {
+  learnedItem = {
+    en: textToTranslate,
+    vi: ans
+  };
+} else {
+  learnedItem = {
+    vi: textToTranslate,
+    en: ans
+  };
+}
+
+// Không lưu trùng cùng một cặp câu
+var alreadyLearned = sessionDict.some(function(item) {
+  return item.en.toLowerCase().trim() === learnedItem.en.toLowerCase().trim()
+      && item.vi.toLowerCase().trim() === learnedItem.vi.toLowerCase().trim();
+});
+
+if (!alreadyLearned) {
+  sessionDict.push(learnedItem);
+}
+
+document.getElementById('t').innerText = ans;
 
     lt = ans;
     ll = lang === 'en-US' ? 'vi-VN' : 'en-US';
