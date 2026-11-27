@@ -607,7 +607,41 @@ var extraDict = [
 ];
 
 // Thư viện ghi nhớ những câu AI đã dịch trong phiên hiện tại
-  var sessionDict = [];
+  
+// THƯ VIỆN GHI NHỚ CÂU ĐÃ DỊCH, LƯU LÂU DÀI
+var learnedStorageKey = 'nailpro_learned_dict_v1';
+var sessionDict = [];
+
+// Tự động nạp những câu đã học từ lần sử dụng trước
+try {
+  var savedLearned = JSON.parse(
+    localStorage.getItem(learnedStorageKey) || '[]'
+  );
+
+  if (Array.isArray(savedLearned)) {
+    sessionDict = savedLearned.filter(function(item) {
+      return item &&
+        typeof item.vi === 'string' &&
+        typeof item.en === 'string' &&
+        item.vi.trim() &&
+        item.en.trim();
+    }).slice(-1000);
+  }
+} catch (e) {
+  sessionDict = [];
+}
+
+// Lưu thư viện câu đã học vào iPhone
+function saveLearnedDict() {
+  try {
+    localStorage.setItem(
+      learnedStorageKey,
+      JSON.stringify(sessionDict.slice(-1000))
+    );
+  } catch (e) {
+    console.warn('Không thể lưu thư viện học thêm:', e);
+  }
+}
 
 function findLocalTranslation(text, srcLang) {
   function clean(s) {
@@ -888,6 +922,9 @@ var alreadyLearned = sessionDict.some(function(item) {
 
 if (!alreadyLearned) {
   sessionDict.push(learnedItem);
+
+  // Lưu ngay để lần mở app sau vẫn còn
+  saveLearnedDict();
 }
 
 document.getElementById('t').innerText = ans;
