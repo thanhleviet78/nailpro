@@ -514,6 +514,7 @@ var extraDict = [
   {vi:"Bạn có cần lấy hóa đơn không",en:"Would you like a receipt"},
   {vi:"Hẹn gặp lại bạn lần sau nhé",en:"See you next time"},
   {vi:"Chúc bạn cuối tuần vui vẻ",en:"Have a great weekend"},
+  
   // 9. Khách phàn nàn & Xử lý tình huống (Bổ sung chuyên sâu)
   {vi:"Bạn cắt phạm vào da mình bị chảy máu rồi",en:"You cut my cuticle and it is bleeding"},
   {vi:"Ôi tôi xin lỗi bạn nhiều, để mình sát trùng và cầm máu ngay nhé",en:"Oh I am so sorry, let me put some antiseptic on it right away"},
@@ -538,37 +539,164 @@ var extraDict = [
   {vi:"Cái đá đính trên móng bị rớt ra rồi",en:"The rhinestone fell off my nail"},
   {vi:"Bạn ghé tiệm bất cứ lúc nào mình gắn lại miễn phí cho nhé",en:"Stop by anytime and we will put it back on for free"},
   {vi:"Mình làm xong bạn kiểm tra kỹ nếu chưa ưng chỗ nào cứ nói mình sửa liền nha",en:"Please check everything carefully and let me know if anything needs fixing"}
+
+  // 10. Cách nói tự nhiên thường gặp của khách Mỹ
+  {vi:"Làm ngắn hơn một chút nhé",en:"A little shorter, please"},
+  {vi:"Cắt ngắn thêm một chút nữa",en:"Just take a little more off"},
+  {vi:"Đừng cắt ngắn quá nhé",en:"Please don't cut them too short"},
+  {vi:"Tôi muốn để móng dài hơn",en:"I want to keep my nails longer"},
+  {vi:"Làm mỏng hơn một chút",en:"Can you make them a little thinner"},
+  {vi:"Móng này hơi dày",en:"This nail feels a little too thick"},
+  {vi:"Tôi muốn dáng tròn hơn",en:"I'd like them a little more rounded"},
+  {vi:"Tôi muốn dáng vuông hơn",en:"I'd like them more square"},
+  {vi:"Tôi muốn đổi sang màu khác",en:"I'd like to change to a different color"},
+  {vi:"Tôi không thích màu này",en:"I don't really like this color"},
+  {vi:"Bạn có màu giống hình này không",en:"Do you have a color like this one"},
+  {vi:"Tôi muốn màu tự nhiên hơn",en:"I'd like a more natural-looking color"},
+  {vi:"Tôi muốn kiểu đơn giản thôi",en:"I just want something simple"},
+  {vi:"Tôi muốn làm giống hình này",en:"I'd like my nails to look like this picture"},
+  {vi:"Bạn có thể sửa ngón này giúp tôi không",en:"Could you fix this nail for me"},
+  {vi:"Móng này hơi đau",en:"This nail hurts a little"},
+  {vi:"Đèn làm nóng tay tôi",en:"The lamp is making my hand feel hot"},
+  {vi:"Tôi thấy hơi rát",en:"It feels a little uncomfortable"},
+  {vi:"Bạn làm nhẹ tay một chút nhé",en:"Please be a little gentler"},
+  {vi:"Bạn có thể nói chậm hơn không",en:"Could you speak a little more slowly"},
+  {vi:"Bạn nói lại giúp tôi được không",en:"Could you say that again, please"},
+  {vi:"Tôi chưa hiểu",en:"I don't understand yet"},
+  {vi:"Bạn chỉ cho tôi xem được không",en:"Could you show me, please"},
+  {vi:"Tổng cộng hết bao nhiêu tiền",en:"How much is the total"},
+  {vi:"Giá này đã bao gồm tháo móng cũ chưa",en:"Does this price include removing my old set"},
+  {vi:"Tôi có thể trả tiền mặt không",en:"Can I pay in cash"},
+  {vi:"Tôi muốn trả bằng thẻ",en:"I'd like to pay by card"},
+  {vi:"Tôi muốn để tiền tip",en:"I'd like to leave a tip"},
+  {vi:"Tôi có thể đặt lịch vào ngày mai không",en:"Can I make an appointment for tomorrow"},
+  {vi:"Tôi sẽ đến trễ khoảng 10 phút",en:"I'll be about 10 minutes late"},
+  {vi:"Tôi muốn đổi giờ hẹn",en:"I'd like to change my appointment time"},
+  {vi:"Tôi muốn hủy lịch hẹn",en:"I'd like to cancel my appointment"},
+
+  // 11. Câu trả lời ngắn và tự nhiên của khách Mỹ
+  {vi:"Một chút thôi",en:"Just a little"},
+  {vi:"Ngắn thêm một chút",en:"A little shorter"},
+  {vi:"Dài hơn một chút",en:"A little longer"},
+  {vi:"Như vậy là được rồi",en:"That's perfect"},
+  {vi:"Như vậy tốt rồi",en:"That looks good"},
+  {vi:"Tôi thích kiểu này",en:"I like this style"},
+  {vi:"Tôi chưa quyết định",en:"I'm not sure yet"},
+  {vi:"Để tôi xem một chút",en:"Let me take a look"},
+  {vi:"Không cần đâu, cảm ơn",en:"No, thank you"},
+  {vi:"Vâng, được ạ",en:"Yes, that works"},
+  {vi:"Không sao đâu",en:"It's okay"},
+  {vi:"Tôi cần thêm một chút thời gian",en:"I need a little more time"},
+
+  // 12. Câu thợ nail thường dùng để xác nhận
+  {vi:"Bạn muốn ngắn như thế này đúng không",en:"You want them this short, right"},
+  {vi:"Bạn muốn giữ nguyên độ dài này phải không",en:"You want to keep this length, right"},
+  {vi:"Bạn muốn đổi màu phải không",en:"You'd like to change the color, right"},
+  {vi:"Bạn cứ nói nếu thấy đau nhé",en:"Please let me know if anything hurts"},
+  {vi:"Bạn thấy nhiệt độ nước như vậy được chưa",en:"Is the water temperature okay now"},
+  {vi:"Bạn xem thử màu này nhé",en:"Please take a look at this color"},
+  {vi:"Bạn kiểm tra lại bộ móng nhé",en:"Please check your nails"},
+  {vi:"Bạn có hài lòng với bộ móng không",en:"Are you happy with your nails"},
+  {vi:"Bạn muốn sửa chỗ nào không",en:"Would you like me to fix anything"},
+  {vi:"Cảm ơn bạn đã chờ",en:"Thank you for waiting"}
 ];
 
-function findLocalTranslation(text, srcLang){
-  var clean=function(s){
-    return (s||'').toLowerCase().replace(/[^\w\sàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/g,'').replace(/\s+/g,' ').trim();
-  };
-  var q=clean(text);
-  if(!q || q.length<2) return null;
-
-  var pool=extraDict.slice();
-  if(typeof data!=='undefined' && Array.isArray(data)){
-    data.forEach(function(g){ if(Array.isArray(g)) pool=pool.concat(g); });
-  }
-  if(typeof convData!=='undefined'){
-    Object.keys(convData).forEach(function(k){ if(Array.isArray(convData[k])) pool=pool.concat(convData[k]); });
+function findLocalTranslation(text, srcLang) {
+  function clean(s) {
+    return String(s || '')
+      .toLowerCase()
+      .replace(/[’‘]/g, "'")
+      .replace(/[^a-z0-9\sàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ']/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
-  var bestMatch=null, bestScore=0;
-  for(var i=0;i<pool.length;i++){
-    var item=pool[i];
-    var src=clean(srcLang==='en-US'?item.en:item.vi);
-    var dst=(srcLang==='en-US'?item.vi:item.en);
-    if(!src || !dst) continue;
-    if(src===q) return dst;
-
-    var qWords=q.split(' '), sWords=src.split(' '), hits=0;
-    qWords.forEach(function(w){ if(w.length>1 && sWords.indexOf(w)!==-1) hits++; });
-    var score=hits/Math.max(qWords.length, sWords.length);
-    if(score>bestScore){ bestScore=score; bestMatch=dst; }
+  function hasNegation(s) {
+    return /\b(no|not|don't|dont|doesn't|doesnt|didn't|didnt|never|can't|cannot|won't|wont|without|không|chưa|đừng|chẳng)\b/.test(s);
   }
-  return bestScore>=0.65 ? bestMatch : null;
+
+  var q = clean(text);
+  if (!q || q.length < 2) return null;
+
+  // Gom dữ liệu từ thư viện ẩn, bài học và hội thoại
+  var pool = Array.isArray(extraDict) ? extraDict.slice() : [];
+
+  if (typeof data !== 'undefined' && Array.isArray(data)) {
+    data.forEach(function(g) {
+      if (Array.isArray(g)) pool = pool.concat(g);
+    });
+  }
+
+  if (
+    typeof convData !== 'undefined' &&
+    convData &&
+    typeof convData === 'object'
+  ) {
+    Object.keys(convData).forEach(function(k) {
+      if (Array.isArray(convData[k])) {
+        pool = pool.concat(convData[k]);
+      }
+    });
+  }
+
+  var qWords = q.split(' ').filter(Boolean);
+  var bestMatch = null;
+  var bestScore = 0;
+  var secondScore = 0;
+
+  for (var i = 0; i < pool.length; i++) {
+    var item = pool[i];
+    if (!item || typeof item !== 'object') continue;
+
+    var src = clean(srcLang === 'en-US' ? item.en : item.vi);
+    var dst = srcLang === 'en-US' ? item.vi : item.en;
+
+    if (!src || !dst) continue;
+
+    // Khớp chính xác luôn được ưu tiên
+    if (src === q) return dst;
+
+    // Không ghép câu phủ định với câu khẳng định
+    if (hasNegation(src) !== hasNegation(q)) continue;
+
+    var sWords = src.split(' ').filter(Boolean);
+    var hits = 0;
+
+    qWords.forEach(function(w) {
+      if (w.length > 1 && sWords.indexOf(w) !== -1) {
+        hits++;
+      }
+    });
+
+    var score = hits / Math.max(qWords.length, sWords.length);
+
+    // Giảm điểm nếu độ dài hai câu chênh lệch nhiều
+    var lengthDiff = Math.abs(qWords.length - sWords.length);
+    score -= lengthDiff * 0.035;
+
+    // Ưu tiên câu có tỷ lệ từ trùng cao
+    if (score > bestScore) {
+      secondScore = bestScore;
+      bestScore = score;
+      bestMatch = dst;
+    } else if (score > secondScore) {
+      secondScore = score;
+    }
+  }
+
+  // Câu rất ngắn cần độ chính xác cao hơn
+  var threshold = qWords.length <= 2 ? 0.85 : 0.72;
+
+  // Nếu hai kết quả gần ngang nhau, không đoán
+  if (
+    bestMatch &&
+    bestScore >= threshold &&
+    bestScore - secondScore >= 0.08
+  ) {
+    return bestMatch;
+  }
+
+  return null;
 }
 
 // Dịch trực tiếp: giữ micro mở, hiện chữ đang nhận diện và chỉ dịch khi có khoảng nghỉ.
@@ -585,27 +713,168 @@ function setMicButtons(activeLang){
     bv.innerText='🇻🇳 Thợ nói (VI)';
   }
 }
-function stopLiveMic(message){
-  liveActive=false;
-  if(livePauseTimer) clearTimeout(livePauseTimer);
-  if(liveRestartTimer) clearTimeout(liveRestartTimer);
-  livePauseTimer=liveRestartTimer=null;
-  if(liveRecognition){try{liveRecognition.onend=null;liveRecognition.stop()}catch(e){} liveRecognition=null;}
-  setMicButtons('');
-  if(message) document.getElementById('o').innerText=message;
-}
-function translateLiveText(textToTranslate, lang){
-  if(!textToTranslate.trim()) return;
+function stopLiveMic(message) {
+  liveActive = false;
 
-  // BƯỚC 1: Ưu tiên dò tìm trong kho dữ liệu có sẵn trước (0 giây)
+  if (livePauseTimer) clearTimeout(livePauseTimer);
+  if (liveRestartTimer) clearTimeout(liveRestartTimer);
+  livePauseTimer = liveRestartTimer = null;
+
+  // Vô hiệu hóa các yêu cầu dịch cũ
+  liveRequestId++;
+
+  // Hủy yêu cầu AI đang chạy
+  if (liveAbort) {
+    try {
+      liveAbort.abort();
+    } catch (e) {}
+    liveAbort = null;
+  }
+
+  // Dừng nhận diện giọng nói
+  if (liveRecognition) {
+    try {
+      liveRecognition.onend = null;
+      liveRecognition.stop();
+    } catch (e) {}
+    liveRecognition = null;
+  }
+
+  setMicButtons('');
+
+  if (message) {
+    document.getElementById('o').innerText = message;
+  }
+}
+
+function translateLiveText(textToTranslate, lang) {
+  textToTranslate = String(textToTranslate || '').trim();
+  if (!textToTranslate) return;
+
+  // Mỗi câu mới vô hiệu hóa yêu cầu dịch trước
+  var requestId = ++liveRequestId;
+
+  if (liveAbort) {
+    try { liveAbort.abort(); } catch (e) {}
+    liveAbort = null;
+  }
+
+  // BƯỚC 1: Ưu tiên thư viện dịch nội bộ
   var localAns = findLocalTranslation(textToTranslate, lang);
-  if(localAns){
+
+  if (localAns) {
     document.getElementById('t').innerText = localAns;
     lt = localAns;
-    ll = lang==='en-US'?'vi-VN':'en-US';
-    if(lang==='vi-VN') spk(localAns,'en-US');
+    ll = lang === 'en-US' ? 'vi-VN' : 'en-US';
+
+    if (lang === 'vi-VN') spk(localAns, 'en-US');
     return;
   }
+
+  // BƯỚC 2: Không tìm thấy mới gọi Gemini
+  var k = (localStorage.getItem('gk') || '').replace(/\s+/g, '');
+
+  if (!k) {
+    document.getElementById('t').innerText =
+      'Câu này chưa có trong thư viện. Hãy cài API Key để dịch bằng AI.';
+    return;
+  }
+
+  var controller = new AbortController();
+  liveAbort = controller;
+
+  var target = lang === 'en-US'
+    ? 'Tiếng Việt'
+    : 'tiếng Anh Mỹ dùng tự nhiên trong tiệm nail';
+
+  var prompt =
+    'Bạn là phiên dịch viên hội thoại trong tiệm nail tại Mỹ. ' +
+    'Hãy dịch tự nhiên, ngắn gọn và đúng ngữ cảnh. ' +
+    'Giữ nguyên ý, giá tiền, tên dịch vụ và thuật ngữ nail cần thiết. ' +
+    'Chỉ trả về bản dịch, không giải thích. ' +
+    'Dịch sang ' + target + ': ' + textToTranslate;
+
+  document.getElementById('t').innerText = 'Đang dịch AI...';
+
+  var apiUrl =
+    'https://generativelanguage.googleapis.com/v1beta/models/' +
+    'gemini-3.5-flash-lite:generateContent';
+
+  var timedOut = false;
+
+  var timeout = setTimeout(function() {
+    timedOut = true;
+    controller.abort();
+  }, 18000);
+
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': k
+    },
+    signal: controller.signal,
+    body: JSON.stringify({
+      contents: [{
+        parts: [{ text: prompt }]
+      }],
+      generationConfig: {
+        temperature: 0.2,
+        maxOutputTokens: 180
+      }
+    })
+  })
+  .then(async function(r) {
+    var d = await r.json();
+
+    if (!r.ok || d.error) {
+      var msg = d.error && d.error.message
+        ? d.error.message
+        : 'Mã lỗi ' + r.status;
+      throw new Error(msg);
+    }
+
+    var ans = d &&
+      d.candidates &&
+      d.candidates[0] &&
+      d.candidates[0].content &&
+      d.candidates[0].content.parts &&
+      d.candidates[0].content.parts[0] &&
+      d.candidates[0].content.parts[0].text;
+
+    if (!ans) {
+      throw new Error('Chưa nhận được bản dịch. Bạn hãy thử nói lại.');
+    }
+
+    // Chỉ hiển thị kết quả thuộc yêu cầu mới nhất
+    if (requestId !== liveRequestId) return;
+
+    ans = ans.trim();
+    document.getElementById('t').innerText = ans;
+
+    lt = ans;
+    ll = lang === 'en-US' ? 'vi-VN' : 'en-US';
+
+    if (lang === 'vi-VN') spk(ans, 'en-US');
+  })
+  .catch(function(err) {
+    if (requestId !== liveRequestId) return;
+
+    if (err.name === 'AbortError' && !timedOut) return;
+
+    document.getElementById('t').innerText = timedOut
+      ? 'Mạng phản hồi quá chậm. Bạn hãy thử lại.'
+      : 'Chưa dịch được: ' + err.message +
+        '. Bạn có thể nói lại.';
+  })
+  .finally(function() {
+    clearTimeout(timeout);
+
+    if (liveAbort === controller) {
+      liveAbort = null;
+    }
+  });
+}
 
   // BƯỚC 2: Câu lạ ngoài kho mới gọi Google AI dịch online
   var k=(localStorage.getItem('gk')||'').replace(/\s+/g,'');
